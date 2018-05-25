@@ -27,3 +27,37 @@ Step2: create batch queue from examples in example queue.
 	3. Process it into batches and place them in the batch queue. 
 
 Each time, get next batch from batch queue feed into model. 
+## 2. Architecture ##
+### 2.1. Pointer ###
+For each decoder timestep,  a generation probability pgen ∈ [0, 1] is calculated, which weights the probability of generating words from the vocabulary, versus copying words from the source text. The vocabulary distribution and the attention distribution are weighted and summed to obtain the final distribution, from which we make our prediction. Note that out-of-vocabulary article words such as 2-0 are included in the final distribution. Best viewed in color.(Abigail et al., 2017;<Get To The Point: Summarization with Pointer-Generator Networks>)	
+![](images/nn_textsum_guider_1.png)
+
+
+### 2.2.Intra-attention ###
+Attention is a key ingredient for machine reading. In this model,  the encoder and decoder attention functions combined. Encoder attention is intra-temporal attention on input sequence. Decoder attention is intra-decoder attention. The two context vectors (marked “C”) are computed from attending over the encoder hidden states and decoder hidden states. Using these two contexts and the current decoder hidden state (“H”), a new word is generated and added to the output sequence.(Romain et al., 2017; <A deep reinforced model for abstractive summarization >)
+![](images/nn_textsum_guider_2.png)
+	
+## 3. Forward process ##
+We have a matrix F representing  the input, now we need to generate from it.
+High-level idea:
+Generate the output sentence word by word using RNN.
+At each output position t, the RNN receives two inputs
+	 A fixed-size vector embedding of the previously generated output symbol
+	 A fixed-size vector encoding a “view” of the input matrix
+How do we get a fixed-size vector from matrix that changes over time?
+	Do a weighted sum of the columns of F based on how important they are at the current time step.(Fat) 
+	The weighting of the input column are each time-step(at) is called attention.
+
+### 3.1 T=1, generate encode attention from matrix F. ###
+![](images/nn_textsum_guider_3.png)
+### 3.2  Obtain decoder hidden state from two contexts and input. ###
+Encoder and decoder attention distribution is a and ad.  Encoder, decoder context vector is C and Cd.
+![](images/nn_textsum_guider_4.png)
+### 3.3  t=3, generate output3 from decoder hidden state, encoder context and decoder context vector. ###
+![](images/nn_textsum_guider_5.png)
+
+## 4. Equalizations ##
+Put  together the equalizations of attention. 
+![](images/nn_textsum_guider_6.png)
+
+	

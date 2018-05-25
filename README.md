@@ -58,6 +58,6 @@ Encoder and decoder attention distribution is a and ad.  Encoder, decoder contex
 
 ## 4. Equalizations ##
 Put  together the equalizations of attention. 
-![](images/nn_textsum_guider_6.png)
+<img src="images/nn_textsum_guider_6.png" width="400" height="600">
 
 	
